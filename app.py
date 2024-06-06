@@ -30,6 +30,10 @@ def home():
 def loginn():
     return render_template('login.html')
 
+@app.route('/signup/')
+def signupp():
+    return render_template('home.html')
+
 @app.route('/dashboard/')
 @login_required
 def dashboard():
