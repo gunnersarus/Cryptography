@@ -2,15 +2,11 @@
 
 {% block content %}
   <div class="card-wrapper">
-
     <div class="card">
 
-      <h1 class="center">Create an Account</h1>
+      <h1 class="center">Log In</h1>
 
-      <form name="signup_form">
-
-        <label for="name">Name</label>
-        <input type="text" name="name" class="field" required>
+      <form name="login_form">
 
         <label for="email">Email</label>
         <input type="email" name="email" class="field" required>
@@ -20,12 +16,11 @@
 
         <p class="error error--hidden"></p>
 
-        <input type="submit" value="Sign Up" class="btn">
+        <input type="submit" value="Log In" class="btn">
       
       </form>
       
     </div>
-
   
   </div>
 {% endblock %}
