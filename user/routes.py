@@ -1,4 +1,4 @@
-from flask import Flask, request, session, redirect, render_template
+from flask import Flask, request, session, redirect, render_template, send_file
 from app import app
 from user.models import User
 
@@ -20,3 +20,9 @@ def verify_2fa():
         otp = request.form.get('otp')
         return User().verify_2fa(otp)
     return render_template('verify_2fa.html')
+
+@app.route('/audio/decrypted')
+def serve_audio():
+    user = User()
+    audio_buffer = user.get_audio()
+    return send_file(audio_buffer, mimetype='audio/wav', as_attachment=False, download_name='decrypted.wav')
