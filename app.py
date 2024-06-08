@@ -37,4 +37,9 @@ def signupp():
 @app.route('/dashboard/')
 @login_required
 def dashboard():
-    return render_template('dashboard.html')
+    return render_template('user-info.html')
+
+@app.route('/audioplay/')
+@login_required
+def audio():
+    return render_template('audio-play.html')
