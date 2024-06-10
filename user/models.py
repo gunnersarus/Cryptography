@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request, session, redirect
 from passlib.hash import pbkdf2_sha256
-from app import db
+from app import db,app
 import uuid
 import smtplib
 from email.mime.multipart import MIMEMultipart
@@ -10,13 +10,31 @@ import itertools
 from wave import open as wave_open
 import os
 import io
+from datetime import datetime,timedelta
+import jwt
 
 class User:
     def __init__(self):
       self.check=""
+
+    def generatetoken(self,userid):
+      payload={
+          "id": userid,
+            "expiration": str(datetime.utcnow()+ timedelta(seconds=120))
+        }
+      token = jwt.encode(
+           payload= payload,
+           key=app.secret_key,
+           algorithm ='HS256'
+        )
+      return token 
+    
+    
+    
     
     def start_session(self, user):
       del user['password']
+      session.permanent= True
       session['logged_in'] = True
       session['user'] = user
       return jsonify(user), 200
@@ -29,7 +47,8 @@ class User:
           "_id": uuid.uuid4().hex,
           "name": request.form.get('name'),
           "email": request.form.get('email'),
-          "password": request.form.get('password')
+          "password": request.form.get('password'),
+          "role": 'userr'
       }
 
       # Encrypt the password
@@ -89,6 +108,9 @@ class User:
 
         stored_otp = session.get('2fa_otp')
         if stored_otp == otpp:
+            session['token']= self.generatetoken(user["_id"])
+            session['role']=user["role"]
+            print(f'my role : {session['role']}')
             del session['temp_user']
             return self.start_session(user)
         

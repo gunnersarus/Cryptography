@@ -1,0 +1,31 @@
+{% extends "dashboard_base.html" %}
+
+{% block content %}
+    <div class="card-wrapper">
+        <div class="card" id="audio-play">
+            <h2 class="center">FADED</h2>
+            <audio controls>
+            <source src="/audio/decrypted" type="audio/wav">
+            Your browser does not support the audio element.
+            </audio>
+        </div>
+    </div>
+    <div class="card-wrapper">
+        <div class="card" id="audio-play">
+            <h2 class="center">Audio Play</h2>
+            <audio controls>
+            <source src="/audio1/decrypted" type="audio/wav">
+            Your browser does not support the audio element.
+            </audio>
+        </div>
+    </div>
+    <div class="card-wrapper">
+        <div class="card" id="audio-play">
+            <h2 class="center">Audio Play</h2>
+            <audio controls>
+            <source src="/audio1/decrypted" type="audio/wav">
+            Your browser does not support the audio element.
+            </audio>
+        </div>
+    </div>
+{% endblock %}

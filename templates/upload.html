@@ -1,0 +1,39 @@
+{% extends "dashboard_base.html" %}
+
+{% block content %}
+
+
+<form action="">
+    
+</form>
+<input type="file" id="fileInput" style="display: none;">
+<button onclick="openFileExplorer()">Open File Explorer</button>
+
+<script>
+    function openFileExplorer() {
+        // Trigger click on file input
+        document.getElementById('fileInput').click();
+    }
+
+    // Function to handle file selection
+    document.getElementById('fileInput').onchange = function() {
+        var file = this.files[0];
+        if (file) {
+            var formData = new FormData();
+            formData.append('file', file);
+
+            // AJAX request to upload the file
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/upload', true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    console.log('File uploaded successfully');
+                } else {
+                    console.error('Error uploading file');
+                }
+            };
+            xhr.send(formData);
+        }
+    };
+</script>
+{% endblock %}
