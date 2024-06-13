@@ -2,7 +2,9 @@ from flask import Flask, request, session, redirect, render_template, Response,j
 from app import app
 from models.decodeaudio_model import Audio
 import os
-
+import hashlib
+import itertools
+from flask import Flask, request, send_file
 
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -12,9 +14,8 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 @app.route('/audio/decrypted')
 def serve1audio():
     audio = Audio
-    audio_buffer = audio.get_audio('sample-9s.wav','sample-9s.wav')
-    audio_buffer.seek(0)
-    return Response(audio_buffer.read(), mimetype='audio/wav')
+    audio_buffer = audio.save_to_cache('sample-9s.wav','sample-9s.wav')
+    return send_file(cache_path, mimetype='audio/wav')
 
 '''
 @app.route('/audio1/decrypted')
