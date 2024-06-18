@@ -8,38 +8,12 @@ import hashlib
 import itertools
 from flask import Flask, request, send_file
 
-class AudioCache:
-    def __init__(self, cache_dir='audio_cache'):
-        self.cache_dir = cache_dir
-        self.cache = {}
-
-        if not os.path.exists(cache_dir):
-            os.makedirs(cache_dir)
-    
-    def _generate_hash(self, audio_data):
-        return hashlib.md5(audio_data).hexdigest()
-
-    def save_to_cache(self, audio_data, sample_rate, file_format='wav'):
-        audio_hash = self._generate_hash(audio_data)
-        
-        if audio_hash in self.cache:
-            return self.cache[audio_hash]
-        
-        file_path = os.path.join(self.cache_dir, f'{audio_hash}.{file_format}')
-        sf.write(file_path, audio_data, sample_rate)
-        
-        self.cache[audio_hash] = file_path
-        return file_path
-    
-    def get_cached_files(self):
-        return list(self.cache.values())
-
-    def get_from_cache(self, audio_hash):
-        return self.cache.get(audio_hash, None)
-
 class Audio:
-    def get_audio(nameframe,namexor):
-        big_num=2000
+    cache = {}
+
+    @staticmethod
+    def get_audio(nameframe, namexor):
+        big_num = 2000
         collection_frame = db.frame
         collection_xor = db.xor
 
@@ -79,10 +53,9 @@ class Audio:
             binkey.append(bin(finkey[i]))
         print("Binary key generated:")
         printlst(binkey)
-
+        import re
         print("Splitting binary keys on the 'b'")
         binkey_fin = []
-        import re
         for i in range(big_num):
             binkey_fin.append(re.findall(r'\d+', binkey[i]))
         print("Now we have a list of lists:")
@@ -147,13 +120,17 @@ class Audio:
         writer.close()
 
         audio_buffer.seek(0)
+
+        # Save to cache
+        cache_key = f"{nameframe}_{namexor}"
+        Audio.cache[cache_key] = audio_buffer
+
         return audio_buffer
-    def save_to_cache(nameframe, namexor):
-        audio_buffer = Audio.get_audio(nameframe, namexor)
-        audio_data = audio_buffer.getvalue()
-        sample_rate = 44100  # Assuming a default sample rate
-        cache_path = audio_cache.save_to_cache(audio_data, sample_rate)
-        return cache_path
+
+    @staticmethod
+    def get_cached_audio(nameframe, namexor):
+        cache_key = f"{nameframe}_{namexor}"
+        return Audio.cache.get(cache_key)
     def send_audio(audio_path):
         big_num=2000
         collection_frame = db.frame

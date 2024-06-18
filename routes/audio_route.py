@@ -14,26 +14,36 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 @app.route('/audio/decrypted')
 def serve1audio():
     audio = Audio
-    audio_buffer = audio.save_to_cache('sample-9s.wav','sample-9s.wav')
-    return send_file(cache_path, mimetype='audio/wav')
+    audio_buffer = Audio.get_cached_audio('piano.wav', 'piano.wav')
+    if not audio_buffer:
+        audio_buffer = Audio.get_audio('piano.wav', 'piano.wav')
+    
+    audio_buffer.seek(0)
+    return send_file(audio_buffer, mimetype='audio/wav')
 
-'''
+
 @app.route('/audio1/decrypted')
 def serve2audio():
     audio = Audio
-    audio_buffer = audio.get_audio('decryptedsound.wav','decryptedsound.wav')
+    audio_buffer = Audio.get_cached_audio('sample-file-4.wav', 'sample-file-4.wav')
+    if not audio_buffer:
+        audio_buffer = Audio.get_audio('sample-file-4.wav', 'sample-file-4.wav')
+    
     audio_buffer.seek(0)
-    return Response(audio_buffer.read(), mimetype='audio/wav')
+    return send_file(audio_buffer, mimetype='audio/wav')
 
 
 @app.route('/audio2/decrypted')
 def serve3audio():
     audio = Audio
-    audio_buffer = audio.get_audio('decryptedsound.wav','decryptedsound.wav')
+    audio_buffer = Audio.get_cached_audio('sample-9s.wav', 'sample-9s.wav')
+    if not audio_buffer:
+        audio_buffer = Audio.get_audio('sample-9s.wav', 'sample-9s.wav')
+    
     audio_buffer.seek(0)
-    return Response(audio_buffer.read(), mimetype='audio/wav')
+    return send_file(audio_buffer, mimetype='audio/wav')
 '''
-
+decryptedsound.wav
 '''
 @app.route('/upload',methods = ["POST"])
 def send():
@@ -46,7 +56,7 @@ def send():
 
 
 
-'''
+
 @app.route('/upload', methods=['POST'])
 def upload_file():
     audio =Audio
@@ -61,7 +71,7 @@ def upload_file():
         file_path = os.path.join('F:\\matma\\doan\\', file.filename)
         audio.send_audio(file_path)
 
-'''
+
     # Save the file to the upload folder
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
     try:
@@ -70,4 +80,4 @@ def upload_file():
         return jsonify({'message': 'File uploaded successfully', 'file_path': file_path})
     except Exception as e:
         return jsonify({'error': str(e)})
-'''
+
