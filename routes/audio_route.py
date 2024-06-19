@@ -16,7 +16,6 @@ def serve1audio():
     audio_buffer.seek(0)
     return Response(audio_buffer.read(), mimetype='audio/wav')
 
-'''
 @app.route('/audio1/decrypted')
 def serve2audio():
     audio = Audio
@@ -28,24 +27,14 @@ def serve2audio():
 @app.route('/audio2/decrypted')
 def serve3audio():
     audio = Audio
-    audio_buffer = audio.get_audio('decryptedsound.wav','decryptedsound.wav')
+    audio_buffer = audio.get_audio('sample-12s.wav','sample-12s.wav')
     audio_buffer.seek(0)
     return Response(audio_buffer.read(), mimetype='audio/wav')
-'''
-
-'''
-@app.route('/upload',methods = ["POST"])
-def send():
-    audio = Audio
-    audio.send_audio('F:\\matma\\doan\\sample-9s.wav')
-    #audio_buffer.seek(0)
-    #eturn Response(audio_buffer.read(), mimetype='audio/wav')
-    
 
 
 
 
-'''
+
 @app.route('/upload', methods=['POST'])
 def upload_file():
     audio =Audio
@@ -60,7 +49,7 @@ def upload_file():
         file_path = os.path.join('F:\\matma\\doan\\', file.filename)
         audio.send_audio(file_path)
 
-'''
+
     # Save the file to the upload folder
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
     try:
@@ -69,4 +58,4 @@ def upload_file():
         return jsonify({'message': 'File uploaded successfully', 'file_path': file_path})
     except Exception as e:
         return jsonify({'error': str(e)})
-'''
+

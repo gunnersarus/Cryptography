@@ -59,7 +59,7 @@ p {
 /* Cards */
 .card-wrapper {
   margin: 0 auto;
-  padding: 90px 30px;
+  padding: 90px 60px;
   flex-wrap: wrap;
   justify-content: center;
   display: flex;
